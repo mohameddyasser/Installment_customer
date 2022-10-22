@@ -1,0 +1,196 @@
+<odoo>
+    <data>
+        <!-- explicit list view definition -->
+
+        <record model="ir.ui.view" id="installment_view_form">
+            <field name="name">installment_view_form</field>
+            <field name="model">installment.installment</field>
+            <field name="arch" type="xml">
+                <form string="installment_form">
+                    <sheet>
+                        <div class="oe_button_box" name="button_box">
+                            <button name="action_invoice" type="object" class="oe_stat_button" icon="fa-star">
+                                <div class="o_stat_info">
+                                    <field name="blank" class="o_stat_value"/>
+                                    <span class="o_stat_text">Invoice</span>
+                                </div>
+                            </button>
+                        </div>
+                        <group>
+                            <group>
+                                <field name="name"/>   <!--placeholder="Enter Your ID."-->
+                                <field name="reference"/>
+                                <field name="date_today"/>
+                                <field name="state"/>
+                            </group>
+                            <group>
+                                <field name="_customers"/>
+                                <field name="_journal"/>
+                                <field name="_account"/>
+                                <field name="_amount"/>
+                                <field name="note"/>
+                            </group>
+                            <sheet>
+                                <group>
+                                    <button name="action_test1" string="Create Invoice" type="object"
+                                            class="oe_highlight"/>
+                                </group>
+                                <group>
+                                    <button name="action_test2" string="Payment" type="object" class="oe_highlight"/>
+                                </group>
+                                <group>
+                                    <button name="action_test3" string="Settlement" type="object" class="oe_highlight"/>
+                                </group>
+                            </sheet>
+                            <group>
+                                <field name="analytic_account"/>
+                                <field name="analytic_tags"/>
+                            </group>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+        <record model="ir.ui.view" id="installment_view_tree">
+            <field name="name">installment_view_tree</field>
+            <field name="model">installment.installment</field>
+            <field name="arch" type="xml">
+                <tree string="installment_tree">
+                    <field name="name"/>
+                    <field name="reference"/>
+                    <field name="date_today"/>
+                    <field name="state"/>
+                    <field name="_customers"/>
+                    <field name="_journal"/>
+                    <field name="_account"/>
+                    <field name="analytic_account"/>
+                    <field name="analytic_tags"/>
+                    <field name="_amount"/>
+                    <field name="note"/>
+                </tree>
+            </field>
+        </record>
+        <record model="ir.ui.view" id="installment_graph_view">
+            <field name="name">installment_graph</field>
+            <field name="model">installment.installment</field>
+            <field name="arch" type="xml">
+                <graph string="Participation's by Customers">
+                    <field name="name"/>
+                    <field name="customers_count" type="measure"/>
+                </graph>
+            </field>
+        </record>
+        <record model="ir.ui.view" id="installment_pivot_view">
+            <field name="name">installment_pivot</field>
+            <field name="model">installment.installment</field>
+            <field name="arch" type="xml">
+                <graph string="Participation's by Customers">
+                    <field name="name"/>
+                    <field name="customers_count" type="measure"/>
+                </graph>
+            </field>
+        </record>
+         <record model="ir.ui.view" id="installment_kanban_view">
+            <field name="name">installment_kanban_view</field>
+            <field name="model">installment.installment</field>
+            <field name="arch" type="xml">
+                <kanban default_group_by="_customers">
+                    <field name="color"/>
+                    <templates>
+                        <t t-name="kanban-box">
+                            <div
+                                    t-attf-class="oe_kanban_color_{{kanban_getcolor(record.color.raw_value)}}
+                                                  oe_kanban_global_click_edit oe_semantic_html_override
+                                                  oe_kanban_card {{record.group_fancy==1 ? 'oe_kanban_card_fancy' : ''}}">
+                                <div class="oe_dropdown_kanban">
+                                    <!-- dropdown menu -->
+                                    <div class="oe_dropdown_toggle">
+                                        <i class="fa fa-bars fa-lg" title="Manage" aria-label="Manage"/>
+                                        <ul class="oe_dropdown_menu">
+                                            <li>
+                                                <a type="delete">Delete</a>
+                                            </li>
+                                            <li>
+                                                <ul class="oe_kanban_colorpicker"
+                                                    data-field="color"/>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </t>
+                    </templates>
+                </kanban>
+            </field>
+        </record>
+
+        <record model="ir.actions.act_window" id="installment_action">
+            <field name="name">Installments</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">installment.installment</field>
+            <field name="view_mode">tree,form,graph,pivot,kanban</field>
+        </record>
+        <menuitem name="Installments" id="installment_main_menu"/>
+        <menuitem name="Installments Menu" id="menu" parent="installment_main_menu"/>
+        <menuitem name="Customer installments" id="sub_menu" parent="menu"
+                  action="installment_action"/>
+
+        <record model="ir.ui.view" id="installment_search_view">
+            <field name="name">installment_search</field>
+            <field name="model">installment.installment</field>
+            <field name="arch" type="xml">
+                <search>
+                    <field name="name"/>
+                    <filter name="my_installment" string="My Installment"
+                            domain="[('analytic_account','=','user.id')]"/>
+                    <group string="Group By">
+                        <filter name="by_analytic_account" string="Analytic Account"
+                                context="{'group_by' : 'analytic_account'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <!-- actions opening views on models -->
+        <!--
+            <record model="ir.actions.act_window" id="installment.action_window">
+              <field name="name">installment window</field>
+              <field name="res_model">installment.installment</field>
+              <field name="view_mode">tree,form</field>
+            </record>
+        -->
+
+        <!-- server action to the one above -->
+        <!--
+            <record model="ir.actions.server" id="installment.action_server">
+              <field name="name">installment server</field>
+              <field name=string"model_id" ref="model_installment_installment"/>
+              <field name="state">code</field>
+              <field name="code">
+                action = {
+                  "type": "ir.actions.act_window",
+                  "view_mode": "tree,form",
+                  "res_model": model._name,
+                }
+              </field>
+            </record>
+        -->
+
+        <!-- Top menu item -->
+        <!--
+            <menuitem name="installment" id="installment.menu_root"/>
+        -->
+        <!-- menu categories -->
+        <!--
+            <menuitem name="Menu 1" id="installment.menu_1" parent="installment.menu_root"/>
+            <menuitem name="Menu 2" id="installment.menu_2" parent="installment.menu_root"/>
+        -->
+        <!-- actions -->
+        <!--
+            <menuitem name="List" id="installment.menu_1_list" parent="installment.menu_1"
+                      action="installment.action_window"/>
+            <menuitem name="Server to list" id="installment" parent="installment.menu_2"
+                      action="installment.action_server"/>
+        -->
+    </data>
+</odoo>

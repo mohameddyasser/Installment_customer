@@ -1,0 +1,19 @@
+<odoo>
+    <record id="group_manager" model="res.groups">
+        <field name="name">Installments / Manager</field>
+    </record>
+
+    <record id="only_users_can_modify" model="ir.rule">
+        <field name="name">Only Users Can Modify</field>
+        <field name="model_id" ref="model_installment_installment"/>
+        <field name="groups" eval="[(4, ref('installment.group_manager'))]"/>
+        <field name="perm_read" eval="0"/>
+        <field name="perm_write" eval="1"/>
+        <field name="perm_create" eval="0"/>
+        <field name="perm_unlink" eval="1"/>
+        <field name="domain_force">
+            [('analytic_account','=','user.id')]
+        </field>
+    </record>
+
+</odoo>
