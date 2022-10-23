@@ -11,11 +11,18 @@
                         <div class="oe_button_box" name="button_box">
                             <button name="action_invoice" type="object" class="oe_stat_button" icon="fa-star">
                                 <div class="o_stat_info">
-                                    <field name="blank" class="o_stat_value"/>
+                                    <field name="blank" class="o_stat_value" ref="account.invoice_form"/>
                                     <span class="o_stat_text">Invoice</span>
                                 </div>
                             </button>
                         </div>
+<!--                        <record id="record_ida" model="ir.ui.view">-->
+<!--            <field name="name">Invoice</field>-->
+<!--            <field name="model">account.invoice</field>-->
+<!--            <field name="inherit_id" ref="account.invoice_form"/>-->
+<!--            <field name="arch" type="xml">-->
+<!--            </field>-->
+<!--        </record>-->
                         <group>
                             <group>
                                 <field name="name"/>   <!--placeholder="Enter Your ID."-->
@@ -39,6 +46,7 @@
                                     <button name="action_test2" string="Payment" type="object" class="oe_highlight"/>
                                 </group>
                                 <group>
+                                    <field name="amount_remaining"/>
                                     <button name="action_test3" string="Settlement" type="object" class="oe_highlight"/>
                                 </group>
                             </sheet>
@@ -67,6 +75,7 @@
                     <field name="analytic_tags"/>
                     <field name="_amount"/>
                     <field name="note"/>
+                    <field name="amount_remaining"/>
                 </tree>
             </field>
         </record>
@@ -90,7 +99,7 @@
                 </graph>
             </field>
         </record>
-         <record model="ir.ui.view" id="installment_kanban_view">
+        <record model="ir.ui.view" id="installment_kanban_view">
             <field name="name">installment_kanban_view</field>
             <field name="model">installment.installment</field>
             <field name="arch" type="xml">

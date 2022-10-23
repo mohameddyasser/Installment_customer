@@ -25,6 +25,7 @@ class installment(models.Model):
     customers_count = fields.Integer(
         string="Customers Count", compute='_get_customers_count', store=True)
     color = fields.Integer()
+    amount_remaining = fields.Float(string="Deposit")
 
     @api.onchange('_amount')
     def check_positive(self):
@@ -41,8 +42,11 @@ class installment(models.Model):
         print("Button Clicked !!!!!!!!!!!!!!!!!!!!!!!1")
     def action_test2(self):
         print("Button Clicked !!!!!!!!!!!!!!!!!!!!!!!1")
+    @api.onchange('_amount','amount_remaining')
     def action_test3(self):
-        print("Button Clicked !!!!!!!!!!!!!!!!!!!!!!!1")
+        if self._amount > 0.0 and self._amount > self.amount_remaining:
+            self._amount = (self._amount - self.amount_remaining)
+            self.amount_remaining = 0.0
     def action_invoice(self):
         print("Test")
 
